@@ -9,39 +9,127 @@
             v-model="buscar"
           ></v-text-field>
 
-          <v-btn dark color="blue" raised @click="getBuscar"> Find</v-btn>
+          <v-btn
+            style="margin: 0 100px 30px 0; height: 45px; border-radius: 8px"
+            dark
+            color="blue"
+            raised
+            @click="getBuscar"
+          >
+            Find</v-btn
+          >
         </div>
       </v-flex>
     </v-layout>
     <div>
-      <v-main v-if="resultado.name.length > 0">
-        <Contenido :resultado="resultado"> </Contenido>
-      </v-main>
+      <v-container>
+        <v-row>
+          <v-container fluid>
+            <v-row dense>
+              <v-col v-for="card in cards" :key="card.name" :cols="card.flex">
+                <v-card class="align-end">
+                  <v-list-item two-line>
+                    <v-list-item-content>
+                      <v-list-item-subtitle
+                        >Mon, 12:30 PM, Mostly sunny</v-list-item-subtitle
+                      >
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-card-title v-text="card.name"></v-card-title>
+
+                  <v-col class="display-1" cols="12">
+                    {{ card.temp }}&deg;C
+                  </v-col>
+
+                  <v-list-item>
+                    <v-list-item-icon>
+                      <v-icon>mdi-send</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-subtitle
+                      >{{ card.viento }} km/h</v-list-item-subtitle
+                    >
+                  </v-list-item>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-row>
+
+        <v-row v-if="resultado.name.length > 0">
+          <q-page class="col">
+            <div id="mapa">
+              <gmap-map
+                :center="center"
+                :zoom="zoom"
+                style="width: 100%; height: 450px"
+              >
+                <gmap-marker
+                  v-for="marker in markers"
+                  :key="marker.key"
+                  :position="marker"
+                  :icon="icon"
+                >
+                </gmap-marker>
+              </gmap-map>
+            </div>
+          </q-page>
+        </v-row>
+      </v-container>
     </div>
   </v-container>
 </template>
 
 <script>
 import axios from "axios";
-import Contenido from "./Contenido";
+//import Contenido from "./Contenido";
+import Vue from "vue";
+import * as VueGoogleMaps from "vue2-google-maps";
+import { POINT_MARKER_ICON_CONFIG } from "../contants/mapSetting";
 
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: "AIzaSyDNruUnouT2GwJbvGzHkRdIfszbyXm4rBM",
+  },
+});
 export default {
   name: "Buscador",
-  components: {
-    Contenido,
+  data() {
+    return {
+      buscar: null,
+      resultado: {
+        name: "",
+        temp: 0,
+        icono: "",
+        lat: 0,
+        lon: 0,
+        viento: "",
+        status: "",
+        flex: 2,
+      },
+      center: {
+        lat: 0,
+        lng: 0,
+      },
+      markers: [
+        {
+          lat: 0,
+          lng: 0,
+        },
+      ],
+      cards: {},
+      zoom: 7,
+      options: {
+        zoomControl: true,
+        mapTypeControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        fullscreenControl: true,
+      },
+      icon: POINT_MARKER_ICON_CONFIG,
+    };
   },
-  data: () => ({
-    buscar: null,
-    resultado: {
-      name: "",
-      temp: 0,
-      icono: "",
-      lat: 0,
-      lon: 0,
-      viento: "",
-      status: "",
-    },
-  }),
+
   methods: {
     getBuscar() {
       axios
@@ -50,7 +138,6 @@ export default {
         )
         .then((res) => {
           this.resultado = {
-            id: res.data.sys.id,
             name: res.data.name,
             temp: (res.data.main.temp - 273.15).toFixed(2),
             icono: `http://openweathermap.org/img/w/${res.data.weather[0].icon}.png`,
@@ -58,6 +145,7 @@ export default {
             lon: res.data.coord.lon,
             viento: res.data.wind.speed,
             status: res.status,
+            flex: 2,
           };
           //creo las variables localStorage para almacenar las coordenadas
 
@@ -65,6 +153,7 @@ export default {
           localStorage.setItem("lonD", res.data.coord.lon);
 
           //almaceno la busqueda para posteriormente mostrar el listado
+
           this.getAlmacenarBusqueda(this.resultado);
         })
         .catch((error) => {
@@ -78,9 +167,10 @@ export default {
 
       let listaActual = [];
 
+      //Buscar el nombre del usuario
+
       const datosClima = [
         {
-          id: resultado.id,
           username: "jerrynaval@gmail.com",
           name: resultado.name,
           temp: resultado.temp,
@@ -99,13 +189,14 @@ export default {
         getlocal != false &&
         getlocal != undefined
       ) {
-        //comprobamos que nuestra variable CUENTAS EXISTA
+        //comprobamos que nuestra variable CLIMA EXISTA
 
         listaActual = JSON.parse(getlocal);
 
+        //buscar la variable de sesion para incluirla en el resultado del clima e imprimir por pantalla
+
         listaActual.push({
-          id: resultado.id,
-          username: "jerrynaval@gmail.com",
+          username: "tucorreo@gmail.com",
           name: resultado.name,
           temp: resultado.temp,
           icono: resultado.icono,
@@ -117,9 +208,16 @@ export default {
         });
 
         localStorage.setItem("clima", JSON.stringify(listaActual));
+        this.cards = listaActual;
       } else {
         localStorage.setItem("clima", JSON.stringify(datosClima));
+        this.cards = datosClima;
       }
+
+      this.center.lat = resultado.lat;
+      this.center.lng = resultado.lon;
+      this.markers.lat = resultado.lat;
+      this.markers.lng = resultado.lon;
     },
   },
 };

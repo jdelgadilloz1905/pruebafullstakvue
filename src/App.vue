@@ -23,5 +23,14 @@ export default {
   data: () => ({
     //
   }),
+
+  /*mounted() {
+    if (!localStorage.getItem("variableSesion")) {
+      //window.location.href = "http://localhost:3000";
+      alert("variable no existe");
+    } else {
+      alert("variable si existe");
+    }
+  },*/
 };
 </script>
