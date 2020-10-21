@@ -30,9 +30,9 @@
                 <v-card class="align-end">
                   <v-list-item two-line>
                     <v-list-item-content>
-                      <v-list-item-subtitle
-                        >Mon, 12:30 PM, Mostly sunny</v-list-item-subtitle
-                      >
+                      <v-list-item-subtitle>{{
+                        dia.toUpperCase()
+                      }}</v-list-item-subtitle>
                     </v-list-item-content>
                   </v-list-item>
 
@@ -85,7 +85,10 @@ import axios from "axios";
 //import Contenido from "./Contenido";
 import Vue from "vue";
 import * as VueGoogleMaps from "vue2-google-maps";
-import { POINT_MARKER_ICON_CONFIG } from "../contants/mapSetting";
+import {
+  nombreDelDiaSegunFecha,
+  POINT_MARKER_ICON_CONFIG,
+} from "@/contants/mapSetting";
 
 Vue.use(VueGoogleMaps, {
   load: {
@@ -97,6 +100,7 @@ export default {
   data() {
     return {
       buscar: null,
+      dia: nombreDelDiaSegunFecha(new Date()),
       resultado: {
         name: "",
         temp: 0,

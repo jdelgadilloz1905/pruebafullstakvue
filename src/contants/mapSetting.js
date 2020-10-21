@@ -8,4 +8,16 @@ const POINT_MARKER_ICON_CONFIG = {
   scale: 1,
 };
 
-export { POINT_MARKER_ICON_CONFIG };
+const nombreDelDiaSegunFecha = (fecha) =>
+  [
+    "domingo",
+    "lunes",
+    "martes",
+    "miércoles",
+    "jueves",
+    "viernes",
+    "sábado",
+    "domingo",
+  ][new Date(fecha).getDay()];
+
+export { nombreDelDiaSegunFecha, POINT_MARKER_ICON_CONFIG };
