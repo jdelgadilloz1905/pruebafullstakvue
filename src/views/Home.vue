@@ -1,18 +1,10 @@
 <template>
   <div class="home">
-    <Buscador />
+    <h1>This is an about page de home</h1>
   </div>
 </template>
-
 <script>
-// @ is an alias to /src
-
-import Buscador from "./Buscador";
-
 export default {
-  name: "Home",
-  components: {
-    Buscador,
-  },
-};
+  name: "Home"
+}
 </script>
