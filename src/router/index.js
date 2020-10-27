@@ -11,39 +11,39 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-    name: "Buscador",
+    path: "/search/:usuario?",
+    name: "search",
     component: Buscador,
   },
   {
     path: "/about",
-    name: "About",
+    name: "about",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
   {
     path: "/home",
-    name: "Home",
+    name: "home",
     component: Home,
   },
   {
     path: "/news",
-    name: "News",
+    name: "news",
     component: News,
   },
   {
     path: "/livecamaras",
-    name: "LiveCamaras",
+    name: "liveCamaras",
     component: LiveCamaras,
   },
   {
     path: "/photos",
-    name: "Photos",
+    name: "photos",
     component: Photos,
   },
   {
     path: "/contact",
-    name: "Contact",
+    name: "contact",
     component: Contact,
   },
 ];

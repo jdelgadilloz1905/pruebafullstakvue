@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app color="blue-grey darken-4" dark>
-    <router-link to="/" style="text-decoration: none">
+    <router-link to="/search" style="text-decoration: none">
       <div class="d-flex align-center">
         <v-img
           alt="Company name"

@@ -22,13 +22,8 @@ export default {
     //
   }),
 
-  /*mounted() {
-    if (!localStorage.getItem("variableSesion")) {
-      //window.location.href = "http://localhost:3000";
-      alert("variable no existe");
-    } else {
-      alert("variable si existe");
-    }
-  },*/
+  mounted() {
+    this.$router.push("/search");
+  },
 };
 </script>

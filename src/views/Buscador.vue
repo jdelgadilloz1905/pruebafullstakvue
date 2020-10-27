@@ -100,6 +100,7 @@ export default {
   data() {
     return {
       buscar: null,
+      usuario: null,
       dia: nombreDelDiaSegunFecha(new Date()),
       resultado: {
         name: "",
@@ -223,6 +224,9 @@ export default {
       this.markers.lat = resultado.lat;
       this.markers.lng = resultado.lon;
     },
+  },
+  mounted() {
+    this.usuario = this.$route.params.usuario;
   },
 };
 </script>
